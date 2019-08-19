@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Button, Input } from 'semantic-ui-react'
+import {  Button, Input, Grid, Container } from 'semantic-ui-react'
 
 const FileLoader = (  { handleFileLoad, mplusOutput }) => {
   if (mplusOutput !== null) {
@@ -7,22 +7,31 @@ const FileLoader = (  { handleFileLoad, mplusOutput }) => {
   }
 
   const inputStyle = {
-    display: 'block',
+    display: 'none',
     color: 'red'
   }
 
+  const buttonStyle = {
+    fontSize: '200%',
+
+  }
 
 
   return(
-    <div>
-      <Header>
-            Load .out file
-      </Header>
-      <Button>
-        <Input type="file" style={inputStyle} onChange={ handleFileLoad }></Input>
-          Load
-      </Button>
-    </div>
+    <Container>
+      <Grid>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row centered>
+          <Button primary style={buttonStyle}> <Input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></Input>
+            <label for="file-upload" class="custom-file-upload">Upload .out -file</label>
+          </Button>
+        </Grid.Row>
+      </Grid>
+    </Container>
+
 
   )
 

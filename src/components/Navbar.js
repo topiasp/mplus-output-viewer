@@ -1,26 +1,27 @@
 import React from 'react'
-import { Grid, Menu, Header } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Grid, Menu } from 'semantic-ui-react'
 
-const Navbar = ({ mplusOutput }) => {
+const Navbar = ({ mplusOutput, handlePageChange }) => {
   if (mplusOutput === null) {
     return('')
   }
 
 
-  const LinkToGroupComparison =  mplusOutput.parsed.NumberOfGroups !== undefined ? <Link to='groupcomparison' style={{ textDecoration: 'none' }}><Menu.Item>Group comparison</Menu.Item></Link> : null
+  const LinkToGroupComparison =  mplusOutput.parsed.NumberOfGroups > 1 ? <Menu.Item onClick={ () =>  handlePageChange('groupcomparison') }>Group comparison</Menu.Item> : ''
+
 
   return(
     <Grid columns={1} doubling>
       <Grid.Column>
         <Menu>
-          <Link to='wholeoutput' style={{ textDecoration: 'none' }}><Menu.Item>Whole output</Menu.Item></Link>
-          <Link to='modelresults' style={{ textDecoration: 'none' }}><Menu.Item>Model results</Menu.Item></Link>
-          <Link to='standardizedmodelresults' style={{ textDecoration: 'none' }}><Menu.Item>Standardized model results</Menu.Item></Link>
+          <Menu.Item  onClick={ () =>  handlePageChange('wholeoutput') }>Whole output</Menu.Item>
+          <Menu.Item  onClick={ () =>  handlePageChange('modelresults') }>Model results</Menu.Item>
+          <Menu.Item  onClick={ () =>  handlePageChange('stdmodelresults') }>Standardized model results</Menu.Item>
           { LinkToGroupComparison }
         </Menu>
       </Grid.Column>
     </Grid>
   )
+
 }
 export default Navbar

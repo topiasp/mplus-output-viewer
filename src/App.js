@@ -3,10 +3,6 @@ import { Container, Sticky } from 'semantic-ui-react'
 import Navbar from './components/Navbar'
 //import dummydata from './dummydata/dummy.js'
 
-import {
-  BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
-} from 'react-router-dom'
 
 import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
@@ -17,6 +13,7 @@ import WholeOutput from './components/WholeOutput'
 const App = () => {
 
   const [ mplusOutput, setMplusOutput ] = useState(null)
+  const [ page, setPage ] = useState('wholeoutput')
 
 
   // useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
@@ -39,6 +36,25 @@ const App = () => {
     reader.readAsText(file,'ISO-881')
   }
 
+  const handlePageChange = (page) => {
+    setPage(page)
+  }
+
+  console.log('page', page)
+  console.log('mplusOutput: ', mplusOutput)
+
+  return (
+    <Container>
+      <FileLoader mplusOutput = { mplusOutput } handleFileLoad={handleFileLoad}/>
+      <Sticky>
+        <Navbar mplusOutput = { mplusOutput } handlePageChange = { handlePageChange }/>
+      </Sticky>
+      <WholeOutput  show = { page === 'wholeoutput' }     mplusOutput = { mplusOutput } />
+      <ModelResults show = { page === 'modelresults' }    results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
+      <ModelResults show = { page === 'stdmodelresults' } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
+    </Container>
+  )
+  /*
   return (
     <Container>
       <Router>
@@ -51,6 +67,6 @@ const App = () => {
         <Route path="/standardizedmodelresults" render={() => <ModelResults results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />} />
       </Router>
     </Container>
-  )
+  )*/
 }
 export default App

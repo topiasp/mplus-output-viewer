@@ -1,28 +1,24 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState } from 'react'
 
 import { Grid, Checkbox, Sticky, Header, Button } from 'semantic-ui-react'
 
 
 
 
-const WholeOutput = ({ mplusOutput }) => {
+const WholeOutput = ({ mplusOutput, show }) => {
 
   const [ selectedChapters, setSelectedChapters ] = useState([])
 
+
+  if (mplusOutput === null || !show ) {
+    return('')
+  }
 
   const getChapterHeaders = () => {
     return mplusOutput === null ? [] : mplusOutput.parsed.chapters.map(chap =>   chap.header.result  )
   }
 
   const chapterHeaders = getChapterHeaders()
-  /*
-  useEffect(() => {
-    setSelectedChapters(getChapterHeaders())
-  }, [mplusOutput])
-  */
-  if (mplusOutput === null) {
-    return('')
-  }
 
   const chapters = mplusOutput.parsed.chapters
 
@@ -37,6 +33,7 @@ const WholeOutput = ({ mplusOutput }) => {
 
   }
 
+  // Shorthand for checking if header is selected
   const isHeaderSelected = (header) => selectedChapters.indexOf(header)>-1
 
   // Function handle checkbox changes
@@ -47,16 +44,7 @@ const WholeOutput = ({ mplusOutput }) => {
     setSelectedChapters(toggleChapterSelection(clickedChapter))
   }
 
-
-  const checkBox = (header) =>  {
-
-    const checked = isHeaderSelected(header)
-
-    return(
-      <Grid.Row key={ 'checkbox_'+header}><Checkbox label={ header } checked = {checked} onChange={handleCheckBoxChange} /></Grid.Row>
-    )
-  }
-
+  // A container for each chapter
   const chapterContentContainer = (chapter,idx) => {
 
     const style = {
@@ -92,12 +80,17 @@ const WholeOutput = ({ mplusOutput }) => {
     <Grid columns={2} doubling>     
       <Grid.Column width={4}>
         <Grid.Row>
-          <Button onClick={ toggleSelectAll }>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</Button>
+          <Button primary onClick={ toggleSelectAll }>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</Button>
         </Grid.Row>
         <Grid.Row>
           <Sticky>
             {
-              chapterHeaders.map(checkBox)
+              chapterHeaders.map(header =>  {
+                const checked = isHeaderSelected(header)
+                return(
+                  <Grid.Row key={ 'checkbox_'+header}><Checkbox label={ header } checked = {checked} onChange={handleCheckBoxChange} /></Grid.Row>
+                )
+              })
             }
           </Sticky>
         </Grid.Row>

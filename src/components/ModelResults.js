@@ -1,9 +1,9 @@
 import React from 'react'
 import { Container, Header, Table } from 'semantic-ui-react'
 
-const ModelResults = ({ results }) => {
+const ModelResults = ({ results, show }) => {
 
-  if (results === null) {
+  if ( results === null || !show ) {
     return('')
   }
   const cells = results.cells
