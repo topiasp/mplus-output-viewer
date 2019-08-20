@@ -3,7 +3,9 @@ import { extractChapters } from './extractChapters'
 import extractTitle    from './extractTitle'
 import extractNumberOfGroups from './extractNumberOfGroups'
 import extractResultTable from './extractResultTable'
+import extractOutputPerGroup from './extractOutputPerGroup'
 import columnsToRows from './columnsToRows'
+
 import { getUniqueFromArray } from './utils'
 
 const parseOut = (mplusoutputstring) => {
@@ -48,6 +50,9 @@ const parseOut = (mplusoutputstring) => {
   parsed.groups =  getUniqueFromArray( parsed.modelResults.cells.map((c) => c.group ) )
 
 
+
+  // Extract chapter group partitions for comparison
+  parsed.chaptersbygroup =   extractOutputPerGroup(parsed.chapters)
 
   return parsed
 }

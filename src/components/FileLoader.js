@@ -26,7 +26,7 @@ const FileLoader = (  { handleFileLoad, mplusOutput }) => {
         <Grid.Row></Grid.Row>
         <Grid.Row centered>
           <Button primary style={buttonStyle}> <Input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></Input>
-            <label for="file-upload" class="custom-file-upload">Upload .out -file</label>
+            <label htmlFor="file-upload" className="custom-file-upload">Upload .out -file</label>
           </Button>
         </Grid.Row>
       </Grid>

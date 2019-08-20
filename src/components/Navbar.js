@@ -6,12 +6,14 @@ const Navbar = ({ mplusOutput, handlePageChange }) => {
     return('')
   }
 
-
   const LinkToGroupComparison =  mplusOutput.parsed.NumberOfGroups > 1 ? <Menu.Item onClick={ () =>  handlePageChange('groupcomparison') }>Group comparison</Menu.Item> : ''
 
+  const extraStyle = {
+    marginBottom: '2%'
+  }
 
   return(
-    <Grid columns={1} doubling>
+    <Grid columns={1} doubling style={ extraStyle }>
       <Grid.Column>
         <Menu>
           <Menu.Item  onClick={ () =>  handlePageChange('wholeoutput') }>Whole output</Menu.Item>

@@ -77,7 +77,7 @@ const WholeOutput = ({ mplusOutput, show }) => {
 
   return(
 
-    <Grid columns={2} doubling>     
+    <Grid columns={2} doubling>
       <Grid.Column width={4}>
         <Grid.Row>
           <Button primary onClick={ toggleSelectAll }>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</Button>

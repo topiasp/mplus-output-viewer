@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Sticky } from 'semantic-ui-react'
 import Navbar from './components/Navbar'
+
 //import dummydata from './dummydata/dummy.js'
 
 
@@ -8,15 +9,16 @@ import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
 import ModelResults from './components/ModelResults'
 import WholeOutput from './components/WholeOutput'
+import GroupComparison from './components/GroupComparison'
 
 
 const App = () => {
 
   const [ mplusOutput, setMplusOutput ] = useState(null)
-  const [ page, setPage ] = useState('wholeoutput')
+  const [ page, setPage ] = useState('groupcomparison')
 
 
-  // useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
+  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
 
 
   const handleFileLoad = (e) => {
@@ -52,21 +54,12 @@ const App = () => {
       <WholeOutput  show = { page === 'wholeoutput' }     mplusOutput = { mplusOutput } />
       <ModelResults show = { page === 'modelresults' }    results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
       <ModelResults show = { page === 'stdmodelresults' } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
+      <GroupComparison
+        show = { page === 'groupcomparison' }
+        chaptersbygroup = { mplusOutput !== null ? mplusOutput.parsed.chaptersbygroup : null }
+      />
     </Container>
   )
-  /*
-  return (
-    <Container>
-      <Router>
-        <FileLoader mplusOutput = { mplusOutput } handleFileLoad={handleFileLoad}/>
-        <Sticky>
-          <Navbar mplusOutput = { mplusOutput }/>
-        </Sticky>
-        <Route path="/wholeoutput" render={() => <WholeOutput mplusOutput={mplusOutput} />} />
-        <Route path="/modelresults" render={() => <ModelResults results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />} />
-        <Route path="/standardizedmodelresults" render={() => <ModelResults results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />} />
-      </Router>
-    </Container>
-  )*/
+
 }
 export default App
