@@ -3,8 +3,8 @@ import { extractChapters } from './extractChapters'
 import extractTitle    from './extractTitle'
 import extractNumberOfGroups from './extractNumberOfGroups'
 import extractResultTable from './extractResultTable'
-import extractOutputPerGroup from './extractOutputPerGroup'
 import columnsToRows from './columnsToRows'
+import extractModelFitInformation from './extractModelFitInformation'
 
 import { getUniqueFromArray } from './utils'
 
@@ -13,7 +13,7 @@ const parseOut = (mplusoutputstring) => {
   const parsed = {}
 
   // Extract main chapters
-  const RegExpChapter = /(^[A-Z][A-Z 0-9]+[A-Z]$)/gm
+  const RegExpChapter = /(^[A-Z][A-Z 0-9-]+[A-Z]$)/gm
   parsed.chapters =  extractChapters({ string: mplusoutputstring, regex: RegExpChapter, filteringRegex: / (BY|WITH|ON)$/m  })
   parsed.title    =  extractTitle(parsed.chapters)
   parsed.NumberOfGroups = extractNumberOfGroups(mplusoutputstring)
@@ -47,12 +47,11 @@ const parseOut = (mplusoutputstring) => {
   }
 
   // Get group names from model results
-  parsed.groups =  getUniqueFromArray( parsed.modelResults.cells.map((c) => c.group ) )
+  parsed.groups = getUniqueFromArray( parsed.modelResults.cells.flat().map((c) => c.group ) )
 
+  // extractModelFitInformation
 
-
-  // Extract chapter group partitions for comparison
-  parsed.chaptersbygroup =   extractOutputPerGroup(parsed.chapters)
+  parsed.modelFitInformation = extractModelFitInformation(parsed.chapters.find(chap => chap.header.result==='MODEL FIT INFORMATION'))
 
   return parsed
 }

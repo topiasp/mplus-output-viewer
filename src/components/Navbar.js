@@ -15,11 +15,12 @@ const Navbar = ({ mplusOutput, handlePageChange }) => {
   return(
     <Grid columns={1} doubling style={ extraStyle }>
       <Grid.Column>
-        <Menu>
+        <Menu inverted>
           <Menu.Item  onClick={ () =>  handlePageChange('wholeoutput') }>Whole output</Menu.Item>
+          <Menu.Item  onClick={ () =>  handlePageChange('modelinformation') }>Model information</Menu.Item>
           <Menu.Item  onClick={ () =>  handlePageChange('modelresults') }>Model results</Menu.Item>
           <Menu.Item  onClick={ () =>  handlePageChange('stdmodelresults') }>Standardized model results</Menu.Item>
-          { LinkToGroupComparison }
+         
         </Menu>
       </Grid.Column>
     </Grid>

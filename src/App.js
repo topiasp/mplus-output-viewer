@@ -9,13 +9,14 @@ import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
 import ModelResults from './components/ModelResults'
 import WholeOutput from './components/WholeOutput'
-import GroupComparison from './components/GroupComparison'
+import GroupComparison from './dummydata/deadcode/GroupComparison'
+import ModelFitInformation from './components/ModelFitInformation'
 
 
 const App = () => {
 
   const [ mplusOutput, setMplusOutput ] = useState(null)
-  const [ page, setPage ] = useState('groupcomparison')
+  const [ page, setPage ] = useState('modelinformation')
 
 
   //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
@@ -42,8 +43,9 @@ const App = () => {
     setPage(page)
   }
 
-  console.log('page', page)
   console.log('mplusOutput: ', mplusOutput)
+
+  const groups = mplusOutput !== null ? mplusOutput.parsed.groups : null
 
   return (
     <Container>
@@ -51,13 +53,10 @@ const App = () => {
       <Sticky>
         <Navbar mplusOutput = { mplusOutput } handlePageChange = { handlePageChange }/>
       </Sticky>
-      <WholeOutput  show = { page === 'wholeoutput' }     mplusOutput = { mplusOutput } />
-      <ModelResults show = { page === 'modelresults' }    results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
-      <ModelResults show = { page === 'stdmodelresults' } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
-      <GroupComparison
-        show = { page === 'groupcomparison' }
-        chaptersbygroup = { mplusOutput !== null ? mplusOutput.parsed.chaptersbygroup : null }
-      />
+      <WholeOutput          show = { page === 'wholeoutput' }         mplusOutput = { mplusOutput } />
+      <ModelFitInformation  show = { page === 'modelinformation' }    modelFitInformation = { mplusOutput !== null ? mplusOutput.parsed.modelFitInformation : null } />
+      <ModelResults         show = { page === 'modelresults' }  groups = { groups }   results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
+      <ModelResults         show = { page === 'stdmodelresults' }  groups = { groups } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
     </Container>
   )
 

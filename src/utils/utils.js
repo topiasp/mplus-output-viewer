@@ -10,4 +10,11 @@ const getUniqueFromArray = (arr) => {
 }
 
 
-export { getUniqueFromArray }
+const trimString = (s) => {
+  return s.replace(/^[ ]{1,}/,'').replace(/[ ]{1,}$/,'')
+}
+
+
+
+
+export { getUniqueFromArray, trimString }

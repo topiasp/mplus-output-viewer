@@ -1,29 +1,49 @@
 import React from 'react'
 import { Container, Header, Table } from 'semantic-ui-react'
+import DownloadCSVbutton from './DownloadCSVbutton'
 
-const ModelResults = ({ results, show }) => {
+import ResultTable from './ResultTable'
+
+
+
+
+
+const ModelResults = ({ results, show, groups  }) => {
 
   if ( results === null || !show ) {
     return('')
   }
+  const headersForGroupTable = ['Parameter header','Parameter','Value type'].concat( groups )
+  const headersForCSV = ['Parameter header','Parameter','Value type','Group','Value']
+
   const cells = results.cells
-  const cellToTableRow = (cell) => {
+
+
+  const cellGroupsAsColumns = (cell) => cell[0].keys.concat(cell.map((cell) => cell.value))
+
+  const groupGrowsAsCells = (groupRow) => {
+
     return(
       <Table.Row>
-        {cell.keys.concat(cell.value).map((key) => <Table.Cell>{ key }</Table.Cell>)}
+        { cellGroupsAsColumns(groupRow).map(c => <Table.Cell>{ c }</Table.Cell>  )}
       </Table.Row>
     )
+
   }
+
+  // Expects array of arrays
+  const dataToCSVconversion = cells.flat().map(cell => [...cell.keys].concat(cell.group).concat(cell.value) )
 
   return(
     <Container>
-      <Header>{ results.header }</Header>
-      <Table>
-        <Table.Body>
-          { cells.map(cellToTableRow) }
-        </Table.Body>
-      </Table>
-
+      <Header>{ results.header }
+        <DownloadCSVbutton params = { { data: dataToCSVconversion, headers: headersForCSV } } />
+      </Header>
+      <ResultTable
+        cells = { cells }
+        cellToTableRow = { groupGrowsAsCells }
+        headers = { headersForGroupTable }
+      />
     </Container>
   )
 }
