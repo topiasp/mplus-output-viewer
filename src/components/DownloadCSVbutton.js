@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button, Icon } from 'semantic-ui-react'
-
+import { Button } from 'react-bootstrap'
 
 
 
@@ -71,12 +70,18 @@ const DownloadCSVbutton = ({ params, float }) => {
 
   const style = {
     margin: '0.5%',
-    float: float
+    float: 'right',
+    fontSize: '75%',
+    padding: 3
   }
+
   return(
-    <Button style = { style } primary onClick={ handleClick } >
-      <Icon size='small' name='download' />
-        CSV
+    <Button
+      style = { style }
+      primary={'true'}
+      onClick={ handleClick }
+    >
+      Download as CSV
     </Button>
   )
 

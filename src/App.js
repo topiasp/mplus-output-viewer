@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Sticky } from 'semantic-ui-react'
-import Navbar from './components/Navbar'
+import Menu from './components/Menu'
 
 //import dummydata from './dummydata/dummy.js'
 
@@ -9,15 +8,15 @@ import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
 import ModelResults from './components/ModelResults'
 import WholeOutput from './components/WholeOutput'
-import GroupComparison from './dummydata/deadcode/GroupComparison'
 import ModelFitInformation from './components/ModelFitInformation'
+
 
 
 const App = () => {
 
   const [ mplusOutput, setMplusOutput ] = useState(null)
-  const [ page, setPage ] = useState('modelinformation')
-
+  const [ page, setPage ] = useState('wholeoutput')
+  const [ showFileUpload, setShowFileUpload ] = useState(true)
 
   //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
 
@@ -37,6 +36,7 @@ const App = () => {
     }
 
     reader.readAsText(file,'ISO-881')
+    setShowFileUpload(false)
   }
 
   const handlePageChange = (page) => {
@@ -47,17 +47,34 @@ const App = () => {
 
   const groups = mplusOutput !== null ? mplusOutput.parsed.groups : null
 
+  // Menu is position: fixed, so this:
+  const contentStyle = {
+    zIndex: -1,
+    marginTop: '5%'
+
+  }
+  const containerStyle = {
+    position: 'relative'
+  }
+
+  const showModal = showFileUpload & mplusOutput === null
+
   return (
-    <Container>
-      <FileLoader mplusOutput = { mplusOutput } handleFileLoad={handleFileLoad}/>
-      <Sticky>
-        <Navbar mplusOutput = { mplusOutput } handlePageChange = { handlePageChange }/>
-      </Sticky>
-      <WholeOutput          show = { page === 'wholeoutput' }         mplusOutput = { mplusOutput } />
-      <ModelFitInformation  show = { page === 'modelinformation' }    modelFitInformation = { mplusOutput !== null ? mplusOutput.parsed.modelFitInformation : null } />
-      <ModelResults         show = { page === 'modelresults' }  groups = { groups }   results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
-      <ModelResults         show = { page === 'stdmodelresults' }  groups = { groups } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
-    </Container>
+    <div style={containerStyle}>
+
+      <FileLoader
+        handleFileLoad={handleFileLoad}
+        showFileUpload={ showModal }
+        handleShowFileChange = {() => setShowFileUpload(false) }/>
+
+      <Menu mplusOutput = { mplusOutput }     handlePageChange = { handlePageChange } page={page}/>
+      <div style={contentStyle}>
+        <WholeOutput          show = { page === 'wholeoutput' }         mplusOutput = { mplusOutput } />
+        <ModelFitInformation  show = { page === 'modelfitinformation' }    modelFitInformation = { mplusOutput !== null ? mplusOutput.parsed.modelFitInformation : null } />
+        <ModelResults         show = { page === 'modelresults' }  groups = { groups }   results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
+        <ModelResults         show = { page === 'stdmodelresults' }  groups = { groups } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
+      </div>
+    </div>
   )
 
 }

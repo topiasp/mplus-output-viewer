@@ -1,8 +1,10 @@
 import React from 'react'
-import { Segment, Table, Header, Container } from 'semantic-ui-react'
+
+import { Container } from 'react-bootstrap'
 import DownloadCSVButton from './DownloadCSVbutton'
 
 
+import { getUniqueFromArray } from '../utils/utils'
 import ResultTable from './ResultTable'
 
 
@@ -11,33 +13,32 @@ const ModelFitInformation = ({ modelFitInformation, show }) => {
     return('')
   }
 
+  console.log('model fit info', modelFitInformation)
   // Hard coded headers for table (and CSV)
-  const headers = ['Statistic group','Statistic','Value']
+  const headers = [
+    { label: 'Statistic group', index: 0, values: getUniqueFromArray( modelFitInformation.map(info => info.header) ) },
+    { label: 'Statistic', index: 1 },
+    { label: 'Value', index: 2 }
+  ]
 
-  const statisticToTableRow = (stat) => {
-    return(
-      <Table.Row key = { stat.header+stat.statistic+stat.value }>
-        <Table.Cell>{ stat.header }</Table.Cell>
-        <Table.Cell>{ stat.statistic }</Table.Cell>
-        <Table.Cell>{ stat.value }</Table.Cell>
-      </Table.Row>)
+  console.log('headers', headers)
+
+
+  const objectsToArrays = (ob) => {
+    return([ob.header, ob.statistic, ob.value ])
   }
 
   // Expects array of arrays
   const dataToCSVconversion = modelFitInformation.map(f => [ f.header, f.statistic, f.value  ])
-  console.log('modelfit', dataToCSVconversion)
+  
 
   return(
     <Container>
-      <Header as='h4'>
-        MODEL FIT INFORMATION
-        <DownloadCSVButton  params = { { data: dataToCSVconversion, headers: headers } } />
-      </Header>
-
+      <div style={{float: 'left'}}>MODEL FIT INFORMATION</div>
+      <DownloadCSVButton  params = { { data: dataToCSVconversion, headers: headers } } />
       <ResultTable
-        cells = { modelFitInformation }
+        cells = { modelFitInformation.map(objectsToArrays) }
         headers = { headers }
-        cellToTableRow = { statisticToTableRow }
       />
 
     </Container>

@@ -1,11 +1,13 @@
 import React from 'react'
-import { Container, Header, Table } from 'semantic-ui-react'
+
+
+import { Container } from 'react-bootstrap'
 import DownloadCSVbutton from './DownloadCSVbutton'
 
 import ResultTable from './ResultTable'
 
 
-
+import { getUniqueFromArray } from '../utils/utils'
 
 
 const ModelResults = ({ results, show, groups  }) => {
@@ -13,35 +15,37 @@ const ModelResults = ({ results, show, groups  }) => {
   if ( results === null || !show ) {
     return('')
   }
-  const headersForGroupTable = ['Parameter header','Parameter','Value type'].concat( groups )
-  const headersForCSV = ['Parameter header','Parameter','Value type','Group','Value']
 
   const cells = results.cells
 
+  //let headersForGroupTable = ['Parameter header','Parameter','Statistic'].concat( groups )
+  let headersForCSV = ['Parameter header','Parameter','Statistic','Group','Value']
+
+  let headersForGroupTable = [
+    { label: 'Parameter header', index: 0, values: getUniqueFromArray(  cells.flat().map(cell => cell.keys[0]) ) },
+    { label: 'Parameter', index: 1,  values: getUniqueFromArray(  cells.flat().map(cell => cell.keys[1]) ) },
+    { label: 'Statistic', index: 2, values: getUniqueFromArray(  cells.flat().map(cell => cell.keys[2]) ) }
+  ]
+
+  headersForGroupTable = headersForGroupTable.concat( groups.map(group => {
+    return({ 'label': group })
+  }))
+
+
+  console.log('cell0', cells[0])
 
   const cellGroupsAsColumns = (cell) => cell[0].keys.concat(cell.map((cell) => cell.value))
 
-  const groupGrowsAsCells = (groupRow) => {
-
-    return(
-      <Table.Row>
-        { cellGroupsAsColumns(groupRow).map(c => <Table.Cell>{ c }</Table.Cell>  )}
-      </Table.Row>
-    )
-
-  }
 
   // Expects array of arrays
   const dataToCSVconversion = cells.flat().map(cell => [...cell.keys].concat(cell.group).concat(cell.value) )
 
   return(
     <Container>
-      <Header>{ results.header }
-        <DownloadCSVbutton params = { { data: dataToCSVconversion, headers: headersForCSV } } />
-      </Header>
+      <div style={{float: 'left'}}>{ results.header }</div>
+      <DownloadCSVbutton params = { { data: dataToCSVconversion, headers: headersForCSV } } />
       <ResultTable
-        cells = { cells }
-        cellToTableRow = { groupGrowsAsCells }
+        cells = { cells.map(cellGroupsAsColumns) }
         headers = { headersForGroupTable }
       />
     </Container>

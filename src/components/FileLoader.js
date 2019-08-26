@@ -1,36 +1,37 @@
 import React from 'react'
-import {  Button, Input, Grid, Container } from 'semantic-ui-react'
 
-const FileLoader = (  { handleFileLoad, mplusOutput }) => {
-  if (mplusOutput !== null) {
+import {  Button, Modal } from 'react-bootstrap'
+
+
+const FileLoader = (  { handleFileLoad, showFileUpload, handleShowFileChange }) => {
+
+  if (!showFileUpload) {
     return('')
   }
 
   const inputStyle = {
-    display: 'none',
-    color: 'red'
+    display: 'none'
   }
 
-  const buttonStyle = {
-    fontSize: '200%',
 
-  }
+  const handleUpload = () => handleShowFileChange()
 
 
   return(
-    <Container>
-      <Grid>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row centered>
-          <Button primary style={buttonStyle}> <Input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></Input>
-            <label htmlFor="file-upload" className="custom-file-upload">Upload .out -file</label>
-          </Button>
-        </Grid.Row>
-      </Grid>
-    </Container>
+
+    <Modal show={true}onHide={handleUpload}>
+      <Modal.Header>
+        <Modal.Title>Mplus output viewer</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Upload an .out -file from Mplus</Modal.Body>
+      <Modal.Footer>
+        <Button primary={'true'}> <input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></input>
+          <label htmlFor="file-upload" className="custom-file-upload">Upload</label>
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
+
 
 
   )

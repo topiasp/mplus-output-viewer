@@ -1,13 +1,11 @@
 import React,{ useState } from 'react'
 
-import { Grid, Checkbox, Sticky, Header, Button } from 'semantic-ui-react'
-
-
-
+import {  Col, Row } from 'react-bootstrap'
+import uuidv4 from 'uuid'
 
 const WholeOutput = ({ mplusOutput, show }) => {
 
-  const [ selectedChapters, setSelectedChapters ] = useState([])
+  const [ selectedChapters, setSelectedChapters ] = useState(['INPUT INSTRUCTIONS'])
 
 
   if (mplusOutput === null || !show ) {
@@ -39,8 +37,9 @@ const WholeOutput = ({ mplusOutput, show }) => {
   // Function handle checkbox changes
 
   const handleCheckBoxChange = (e) => {
+    //e.preventDefault()
 
-    const clickedChapter = e.target.innerText
+    const clickedChapter = e.target.value
     setSelectedChapters(toggleChapterSelection(clickedChapter))
   }
 
@@ -50,14 +49,14 @@ const WholeOutput = ({ mplusOutput, show }) => {
     const style = {
       whiteSpace: 'pre-wrap',
       fontFamily: 'Consolas',
+      fontSize: '70%',
       display: isHeaderSelected( chapter.header ) ? '' : 'none'
     }
+    const content = '<h6>'+chapter.header +'</h6>\n' + chapter.content
     return(
-      <div>
-        <div></div>
-        <Header style={ style }>{ chapter.header }</Header>
-        <div key={ 'chapter_'+idx } style={ style }  dangerouslySetInnerHTML={{ __html: chapter.content }} />
-      </div>
+      <Row key={uuidv4()}>
+        <div style={ style }  dangerouslySetInnerHTML={{ __html: content }} />
+      </Row>
     )
   }
 
@@ -75,35 +74,39 @@ const WholeOutput = ({ mplusOutput, show }) => {
     }
   }
 
-  return(
+  const menuStyle = {
+    position: 'fixed',
+    marginLeft: '5%',
+    marginTop: '2%'
+  }
 
-    <Grid columns={2} doubling>
-      <Grid.Column width={4}>
-        <Grid.Row>
-          <Button primary onClick={ toggleSelectAll }>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</Button>
-        </Grid.Row>
-        <Grid.Row>
-          <Sticky>
-            {
-              chapterHeaders.map(header =>  {
-                const checked = isHeaderSelected(header)
-                return(
-                  <Grid.Row key={ 'checkbox_'+header}><Checkbox label={ header } checked = {checked} onChange={handleCheckBoxChange} /></Grid.Row>
-                )
-              })
-            }
-          </Sticky>
-        </Grid.Row>
-      </Grid.Column>
-      <Grid.Column width={12}>
+  return(
+    <Row>
+      <Col xs={4}>
+        <div style = {menuStyle} >
+          <Row>
+            <input type='checkbox'  onClick={ toggleSelectAll }/><div style={{ fontSize: '65%' }}>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</div>
+          </Row>
+          {
+            chapterHeaders.map(header =>  {
+              const checked = isHeaderSelected(header)
+              const style = { fontSize: '65%' }
+              return(
+                <Row key={uuidv4()}>
+                  <input type='checkbox' checked = { checked } onChange={handleCheckBoxChange} value = { header }/><div style={style}>{ header }</div>
+                </Row>
+              )
+            })
+          }
+        </div>
+
+      </Col>
+      <Col xs={8}>
         {
           chapters.map((chap,idx) => chapterContentContainer( { content: chap.content.join('\n'), header: chap.header.result },idx) )
         }
-      </Grid.Column>
-
-    </Grid>
-
-
+      </Col>
+    </Row>
   )
 
 }
