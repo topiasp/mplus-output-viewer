@@ -12,7 +12,9 @@ const Menu = ({ mplusOutput, handlePageChange, page }) => {
     { page: 'wholeoutput',       label: 'Whole output' },
     { page: 'modelfitinformation',  label: 'Model information' },
     { page: 'modelresults',      label: 'Model results' },
-    { page: 'stdmodelresults',   label: 'Standardized model results' }
+    { page: 'stdmodelresults',   label: 'Standardized model results' },
+    { page: 'residualoutput',   label: 'Residual output' },
+    { page: 'modelmodificationindices', label: 'Model modification indices' }
   ]
 
   const buttonStyle = {

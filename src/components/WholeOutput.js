@@ -5,7 +5,7 @@ import uuidv4 from 'uuid'
 
 const WholeOutput = ({ mplusOutput, show }) => {
 
-  const [ selectedChapters, setSelectedChapters ] = useState(['INPUT INSTRUCTIONS'])
+  const [ selectedChapters, setSelectedChapters ] = useState(['RESIDUAL OUTPUT'])
 
 
   if (mplusOutput === null || !show ) {

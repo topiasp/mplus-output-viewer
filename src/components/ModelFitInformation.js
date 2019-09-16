@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Container } from 'react-bootstrap'
-import DownloadCSVButton from './DownloadCSVbutton'
+
 
 
 import { getUniqueFromArray } from '../utils/utils'
@@ -13,29 +13,21 @@ const ModelFitInformation = ({ modelFitInformation, show }) => {
     return('')
   }
 
-  console.log('model fit info', modelFitInformation)
-  // Hard coded headers for table (and CSV)
+  // Hard coded headers for table
   const headers = [
     { label: 'Statistic group', index: 0, values: getUniqueFromArray( modelFitInformation.map(info => info.header) ) },
     { label: 'Statistic', index: 1 },
     { label: 'Value', index: 2 }
   ]
 
-  console.log('headers', headers)
-
-
   const objectsToArrays = (ob) => {
     return([ob.header, ob.statistic, ob.value ])
   }
 
-  // Expects array of arrays
-  const dataToCSVconversion = modelFitInformation.map(f => [ f.header, f.statistic, f.value  ])
-  
 
   return(
     <Container>
-      <div style={{float: 'left'}}>MODEL FIT INFORMATION</div>
-      <DownloadCSVButton  params = { { data: dataToCSVconversion, headers: headers } } />
+      <div style={{float: 'left' }}>MODEL FIT INFORMATION</div>
       <ResultTable
         cells = { modelFitInformation.map(objectsToArrays) }
         headers = { headers }

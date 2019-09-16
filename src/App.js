@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Menu from './components/Menu'
 
 //import dummydata from './dummydata/dummy.js'
+//import dummydata_single from './dummydata/dummy_single'
 
 
 import parseOut from './utils/parseOut'
@@ -9,6 +10,8 @@ import FileLoader from './components/FileLoader'
 import ModelResults from './components/ModelResults'
 import WholeOutput from './components/WholeOutput'
 import ModelFitInformation from './components/ModelFitInformation'
+import ResidualOutput from './components/ResidualOutput'
+import ModelModificationIndices from './components/ModelModificationIndices'
 
 
 
@@ -19,6 +22,7 @@ const App = () => {
   const [ showFileUpload, setShowFileUpload ] = useState(true)
 
   //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
+  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata_single.raw,parsed: parseOut(dummydata_single.raw) })  }, [])
 
 
   const handleFileLoad = (e) => {
@@ -73,6 +77,8 @@ const App = () => {
         <ModelFitInformation  show = { page === 'modelfitinformation' }    modelFitInformation = { mplusOutput !== null ? mplusOutput.parsed.modelFitInformation : null } />
         <ModelResults         show = { page === 'modelresults' }  groups = { groups }   results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
         <ModelResults         show = { page === 'stdmodelresults' }  groups = { groups } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
+        <ResidualOutput       show = { page === 'residualoutput' }  output={ mplusOutput !== null ? mplusOutput.parsed.residualOutput : null }/>
+        <ModelModificationIndices show = {  page === 'modelmodificationindices' } modelmodificationindices={ mplusOutput !== null ? mplusOutput.parsed.modelIndices : null }/>
       </div>
     </div>
   )

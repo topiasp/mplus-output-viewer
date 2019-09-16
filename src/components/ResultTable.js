@@ -4,6 +4,8 @@ import { Table } from 'semantic-ui-react'
 import uuidv4 from 'uuid'
 import CheckboxList from './CheckboxList'
 
+import DownloadCSVbutton from './DownloadCSVbutton'
+
 // Componente
 
 
@@ -11,13 +13,12 @@ const ResultTable = ({ headers, cells }) => {
 
   const [tableFilters, setTableFilters] = useState({})
 
-  console.log('tableFilters ', tableFilters)
-
   const tableStyle = { fontSize: '75%',padding: '1px' }
-  const cellStyle = { padding: 1 }
+  const cellStyle = { padding: 2 }
 
   const dataToCells = (cells,idx) => {
-    const style = { backgroundColor: idx % 2 === 0 ? 'lightgrey' : '' }
+    const everyother = idx % 2 === 0
+    const style = { backgroundColor: everyother ? 'rgba(185, 186, 187, 0.13)' : '', color: everyother ? 'black' : '' }
     return( <tr key={uuidv4()} style={style}>{ cells.map(c => <td key={uuidv4()} style={cellStyle}>{ c }</td>)}</tr>    )
   }
 
@@ -69,18 +70,22 @@ const ResultTable = ({ headers, cells }) => {
 
 
   return(
-    <Table style={tableStyle}  >
-      <thead>
-        <tr>
-          {
-            headers.map(createHeader).map(c => <th key={uuidv4()} style={cellStyle}>{ c }</th>)
-          }
-        </tr>
-      </thead>
-      <tbody>
-        { cells.filter(applyFilter).map((c,idx) => dataToCells(c,idx)) }
-      </tbody>
-    </Table>
+    <div>
+      <DownloadCSVbutton params = { { data: cells, headers: headers.map(h => h.label ) } } />
+      <Table style={tableStyle}  >
+        <thead>
+          <tr>
+            {
+              headers.map(createHeader).map(c => <th key={uuidv4()} style={cellStyle}>{ c }</th>)
+            }
+          </tr>
+
+        </thead>
+        <tbody>
+          { cells.filter(applyFilter).map((c,idx) => dataToCells(c,idx)) }
+        </tbody>
+      </Table>
+    </div>
 
   )
 

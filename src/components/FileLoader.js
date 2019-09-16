@@ -25,8 +25,8 @@ const FileLoader = (  { handleFileLoad, showFileUpload, handleShowFileChange }) 
       </Modal.Header>
       <Modal.Body>Upload an .out -file from Mplus</Modal.Body>
       <Modal.Footer>
-        <Button primary={'true'}> <input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></input>
-          <label htmlFor="file-upload" className="custom-file-upload">Upload</label>
+        <Button primary={'true'} > <input id="file-upload" type="file" style={inputStyle} onChange={ handleFileLoad }></input>
+          <label htmlFor="file-upload" className="custom-file-upload"  style={{ margin: '0px' }}>Upload</label>
         </Button>
       </Modal.Footer>
     </Modal>

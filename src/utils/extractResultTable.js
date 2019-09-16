@@ -79,7 +79,7 @@ const extractResultTable = (params) => {
   let cells
 
   // Find the chapter that has the "headerToFind" (eg. MODEL RESULTS)
-  let modelResults = chapters.filter((chapt) => chapt.header.result === headerToFind)[0]
+  let modelResults = chapters.find((chapt) => chapt.header.result === headerToFind)
 
   // If output has groups:
   if (NumberOfGroups !== undefined & NumberOfGroups>1)  {
