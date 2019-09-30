@@ -46,6 +46,7 @@ const parseOut = (mplusoutputstring) => {
       cells: columnsToRows({ cells: cells, variables: variables }) // Pivot columns to rows
     }
   } catch(e) {
+    alert('Error extracting model results')
     console.log('Error with model results: ', e.message)
   }
 
@@ -66,9 +67,11 @@ const parseOut = (mplusoutputstring) => {
   }
 
   // Get group names from model results
-
-  parsed.groups = getUniqueFromArray( parsed.modelResults.cells.flat().map((c) => c.group ) )
-
+  try {
+    parsed.groups = getUniqueFromArray( parsed.modelResults.cells.flat().map((c) => c.group ) )
+  } catch(e) {
+    console.log('Error extracting group names. Model results: ',parsed.modelResults)
+  }
   // extractModelFitInformation
   try {
     parsed.modelFitInformation = extractModelFitInformation(parsed.chapters.find(chap => chap.header.result==='MODEL FIT INFORMATION'))

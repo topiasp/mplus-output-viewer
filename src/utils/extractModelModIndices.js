@@ -77,7 +77,7 @@ const extractModelIndicesTable = (params) => {
 
 
   if (chapter === undefined | chapter === null) {
-    alert('No output loaded to get model results from!')
+    throw new Error('MODEL MODIFICATION INDICES chapter not found!')
   }
 
   // Find limit for minimum M.I. value

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Menu from './components/Menu'
-
-//import dummydata from './dummydata/dummy.js'
-//import dummydata_single from './dummydata/dummy_single'
-
+/*
+import dummydata from './dummydata/dummy.js'
+import dummydata_ess from './dummydata/dummy_ess'
+import dummydata_single from './dummydata/dummy_single'
+*/
 
 import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
@@ -22,6 +23,7 @@ const App = () => {
   const [ showFileUpload, setShowFileUpload ] = useState(true)
 
   //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
+  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata_ess.raw) })  }, [])
   //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata_single.raw,parsed: parseOut(dummydata_single.raw) })  }, [])
 
 

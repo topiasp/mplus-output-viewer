@@ -73,7 +73,7 @@ const extractResultTable = (params) => {
   const NumberOfGroups = params.NumberOfGroups
 
   if (chapters === undefined | chapters === null) {
-    alert('No output loaded to get model results from!')
+    throw new Error('MODEL RESULTS chapter not found!')
   }
 
   let cells

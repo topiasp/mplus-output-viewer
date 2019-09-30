@@ -5,16 +5,18 @@ import uuidv4 from 'uuid'
 
 const WholeOutput = ({ mplusOutput, show }) => {
 
-  const [ selectedChapters, setSelectedChapters ] = useState(['RESIDUAL OUTPUT'])
+  const [ selectedChapters, setSelectedChapters ] = useState(['THE MODEL ESTIMATION TERMINATED NORMALLY'])
+
+  const getChapterHeaders = () => {
+    return mplusOutput === null ? [] : mplusOutput.parsed.chapters.map(chap =>   chap.header.result  )
+  }
 
 
   if (mplusOutput === null || !show ) {
     return('')
   }
 
-  const getChapterHeaders = () => {
-    return mplusOutput === null ? [] : mplusOutput.parsed.chapters.map(chap =>   chap.header.result  )
-  }
+
 
   const chapterHeaders = getChapterHeaders()
 
@@ -52,11 +54,11 @@ const WholeOutput = ({ mplusOutput, show }) => {
       fontSize: '70%',
       display: isHeaderSelected( chapter.header ) ? '' : 'none'
     }
-    const content = '<h6>'+chapter.header +'</h6>\n' + chapter.content
+    const content = '<h6>'+chapter.header +'</h6>\n' + '<div>' + chapter.content + '</div>'
     return(
-      <Row key={uuidv4()}>
+      <div key={uuidv4()}>
         <div style={ style }  dangerouslySetInnerHTML={{ __html: content }} />
-      </Row>
+      </div>
     )
   }
 
@@ -81,32 +83,36 @@ const WholeOutput = ({ mplusOutput, show }) => {
   }
 
   return(
-    <Row>
-      <Col xs={4}>
-        <div style = {menuStyle} >
-          <Row>
-            <input type='checkbox'  onClick={ toggleSelectAll }/><div style={{ fontSize: '65%' }}>{  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }</div>
-          </Row>
-          {
-            chapterHeaders.map(header =>  {
-              const checked = isHeaderSelected(header)
-              const style = { fontSize: '65%' }
-              return(
-                <Row key={uuidv4()}>
-                  <input type='checkbox' checked = { checked } onChange={handleCheckBoxChange} value = { header }/><div style={style}>{ header }</div>
-                </Row>
-              )
-            })
-          }
-        </div>
+    <div style={ { width: '100%' } }>
+      <Row>
+        <Col xs={4}>
+          <div style = {menuStyle} >
+            <div style={{ fontSize: '65%' }}>
+              <input type='checkbox'  onClick={ toggleSelectAll }/>
+              {  selectedChapters.length !== chapterHeaders.length ? 'SELECT ALL' : 'DESELECT ALL' }
+            </div>
+            {
+              chapterHeaders.map(header =>  {
+                const checked = isHeaderSelected(header)
+                const style = { fontSize: '65%' }
+                return(
+                  <div key={uuidv4()} style={style}>
+                    <input type='checkbox' checked = { checked } onChange={handleCheckBoxChange} value = { header }/>
+                    { header }
+                  </div>
+                )
+              })
+            }
+          </div>
 
-      </Col>
-      <Col xs={8}>
-        {
-          chapters.map((chap,idx) => chapterContentContainer( { content: chap.content.join('\n'), header: chap.header.result },idx) )
-        }
-      </Col>
-    </Row>
+        </Col>
+        <Col xs={8}>
+          {
+            chapters.map((chap,idx) => chapterContentContainer( { content: chap.content.join('\n'), header: chap.header.result },idx) )
+          }
+        </Col>
+      </Row>
+    </div>
   )
 
 }

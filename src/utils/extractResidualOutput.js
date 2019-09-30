@@ -5,6 +5,8 @@ The structure of residual output is as follows:
    ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR groupname
          Model Estimated Means/Intercepts/Thresholds
          Residuals for Means/Intercepts/Thresholds
+         Standardized Residuals (z-scores) for Means/Intercepts/Threshold
+         Normalized Residuals for Means/Intercepts/Threshold
          Model Estimated Covariances/Correlations/Residual Correlations
       	 Model Estimated Correlations/Residual Correlations
          Residuals for Covariances/Correlations/Residual Correlations
@@ -15,14 +17,13 @@ The structure of residual output is as follows:
 
 const parseESTIMATED = (ESTIMATED_GROUP) => {
 
+
   const params = {
     string: ESTIMATED_GROUP.content.join('\n'),
-    regex: /[A-Z][a-zA-Z/ ]{1,}s$/gm
+    regex: /[A-Z][a-z][a-zA-Z/ ()\\-]{1,}$/gm
   }
   let chaptersOfEstimated = extractChapters(params)
 
-
-  //console.log('chaptersOfEstimated')
 
   let group = /FOR (.+$)/.exec(ESTIMATED_GROUP.header.result) // Get group name from header text
 
@@ -35,18 +36,16 @@ const parseESTIMATED = (ESTIMATED_GROUP) => {
     })
   }
 
-  //console.log('chaptersOfEstimated',chaptersOfEstimated)
 
   // Separate based on nature of table
   //  1. Means: Model Estimated Means.. & Residuals for means
-  //  2. Covariances: others..
+  //  2. Covariances: These are cross-tabulations
 
-  const chapterDivider = (chap) => chap.header.result.indexOf('Model Estimated Means') > -1 | chap.header.result.indexOf('Residuals for Means') > -1
+  const chapterDivider = (chap) => /Residuals.+for Means/.test(chap.header.result) |  chap.header.result.indexOf('Model Estimated Means') > -1
 
   const means = chaptersOfEstimated.filter(chapterDivider)
   const parsedMeans = means.map(parseMeans)
 
-  //console.log('parsedMeans',parsedMeans)
 
   let covariances =  chaptersOfEstimated.filter(chap => !chapterDivider(chap))
 
@@ -55,8 +54,6 @@ const parseESTIMATED = (ESTIMATED_GROUP) => {
   })
   // this gathers covarience/correlation tables that are spread into several tables in the output
   const  gatheredCovariances = gatherByKey(covariances)
-
-  //console.log('gatheredCovariances',gatheredCovariances)
 
 
   let parsedCovariances =   gatheredCovariances.map(table => {
@@ -74,7 +71,6 @@ const parseESTIMATED = (ESTIMATED_GROUP) => {
     }
   })
 
-  //console.log('parsedCovariances',parsedCovariances)
 
   return {
     means: parsedMeans,
@@ -117,8 +113,6 @@ const extractResidualOutput = (ResidualOutputChapter) => {
   //console.log('UNIVARIATE',UNIVARIATE)
 
   const PARSED_ESTIMATED  = ESTIMATED.map(parseESTIMATED)
-
-  //console.log('PARSED_ESTIMATED', PARSED_ESTIMATED)
 
 
   return {
