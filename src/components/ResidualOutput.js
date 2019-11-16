@@ -53,6 +53,33 @@ const ResidualOutput = ({ output,show }) => {
       </div>
     )
   })(output.means)
+  // univariateProportions
+  let propTable = ((props) => {
+
+    if (props.headers.length === 0 ) {
+      return ''
+    }
+
+    // Add headers: Group and parameter
+
+    let headers = [
+      { label: 'Group', index: 0, values:  groups },
+      { label: 'Variable', index: 1, values: getUniqueFromArray( props.cells.map(o => o[1] ) ) },
+      { label: 'Category', index: 1, values: getUniqueFromArray( props.cells.map(o => o[2] ) )   }
+    ]
+    // Variable = Parameter here
+    headers = headers.concat( props.headers.filter(h => h !== 'Variable').map(h => ({ 'label': h }) )  )
+
+    return (
+      <div>
+        <h3>Univariate proportions for categorical variables</h3>
+        <ResultTable
+          cells = {  props.cells }
+          headers={  headers }/>
+      </div>
+    )
+  })(output.univariateProportions)
+
 
   // Return tables
 
@@ -64,6 +91,10 @@ const ResidualOutput = ({ output,show }) => {
       <h2>Covariance/Correlation tables</h2>
       {
         output.covariances.map(cov => correlationOrCovarianceTableFromData(cov,groups))
+      }
+      <h2></h2>
+      {
+        propTable
       }
     </Container>
   )
@@ -80,15 +111,12 @@ const correlationOrCovarianceTableFromData = (data,columns) => {
 
   const pivotedCells = rowToColumn(cells)
 
-  //console.log('cells', cells)
-  //console.log('pivotedCells', pivotedCells)
 
   let headers = [
     { label: 'Parameter 1',  index: 0, values: getUniqueFromArray( cells.map(cell => cell.rows[0] ) )  },
     { label: 'Parameter 2',  index: 1, values: getUniqueFromArray( cells.map(cell => cell.rows[1] ) ) },
   ].concat( columns.map(group => {   return({ 'label': group })  }))
 
-  console.log('headewrs', headers)
 
   return(
     <div key={uuidv4()} >

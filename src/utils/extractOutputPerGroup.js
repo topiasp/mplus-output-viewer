@@ -29,10 +29,6 @@ const extractOutputPerGroup = (chapters) => {
   const RESIDUALOUTPUT = { nameOfChapter: 'RESIDUAL OUTPUT', splitter: /ESTIMATED MODEL AND RESIDUALS \(OBSERVED - ESTIMATED\) FOR [A-Z0-9_]+$/gm  }
   RESIDUALOUTPUT.content = getChapterGroupPartitions(RESIDUALOUTPUT, chapters)
 
-  //console.log('modelres', MODELRESULTS)
-  //console.log('RESIDUALOUTPUT', RESIDUALOUTPUT)
-  //console.log('univariate', UNIVARIATE)
-
   return([
     UNIVARIATE,
     MODELRESULTS,

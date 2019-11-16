@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Menu from './components/Menu'
-/*
-import dummydata from './dummydata/dummy.js'
-import dummydata_ess from './dummydata/dummy_ess'
-import dummydata_single from './dummydata/dummy_single'
-*/
+
+
 
 import parseOut from './utils/parseOut'
 import FileLoader from './components/FileLoader'
@@ -22,21 +19,15 @@ const App = () => {
   const [ page, setPage ] = useState('wholeoutput')
   const [ showFileUpload, setShowFileUpload ] = useState(true)
 
-  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata.raw) })  }, [])
-  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata.raw,parsed: parseOut(dummydata_ess.raw) })  }, [])
-  //useEffect(() => { setMplusOutput({ filename: 'dummydata', string: dummydata_single.raw,parsed: parseOut(dummydata_single.raw) })  }, [])
+  const handleFileLoad = (file) => {
 
-
-  const handleFileLoad = (e) => {
-    const fileInput = e.target
-    const file = fileInput.files[0]
     const reader = new FileReader()
 
     reader.onload = () =>  {
       setMplusOutput(
         {
           string: reader.result
-          ,filename: fileInput.files[0].name
+          ,filename: file.name
           ,parsed: parseOut(reader.result)
         })
     }
@@ -48,8 +39,6 @@ const App = () => {
   const handlePageChange = (page) => {
     setPage(page)
   }
-
-  console.log('mplusOutput: ', mplusOutput)
 
   const groups = mplusOutput !== null ? mplusOutput.parsed.groups : null
 

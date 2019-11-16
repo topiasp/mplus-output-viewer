@@ -20,8 +20,6 @@ const ModelModificationIndices = ({ modelmodificationindices,show }) => {
     )
   }
 
-  //console.log('modelmodificationindices', modelmodificationindices)
-
 
   let groups = getUniqueFromArray( modelmodificationindices.cells.map(o => o.keys[0]) )
   const cells = manipulateModificationIndicesToTableCells(modelmodificationindices.cells, groups)
