@@ -67,7 +67,7 @@ const extractModelIndicesTable = (params) => {
   const chapter = params.chapter
   const NumberOfGroups = params.NumberOfGroups
 
-  if (NumberOfGroups === 1) {
+  if (NumberOfGroups === 1 | chapter === undefined | chapter === null) {
     // Apparently, if no groups in analysis -> no mod indices
     return undefined
   }
@@ -75,10 +75,6 @@ const extractModelIndicesTable = (params) => {
 
   const modVariables =  ['M.I.'  ,'E.P.C.' ,'Std E.P.C.' ,'StdYX E.P.C.']
 
-
-  if (chapter === undefined | chapter === null) {
-    throw new Error('MODEL MODIFICATION INDICES chapter not found!')
-  }
 
   // Find limit for minimum M.I. value
   const minimumMIvalue = chapter.content.find(row => row.indexOf('Minimum M.I. value for printing the modification index')>-1)

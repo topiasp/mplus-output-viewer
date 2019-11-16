@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Menu from './components/Menu'
 
 
@@ -40,7 +40,7 @@ const App = () => {
     setPage(page)
   }
 
-  const groups = mplusOutput !== null ? mplusOutput.parsed.groups : null
+
 
   // Menu is position: fixed, so this:
   const contentStyle = {
@@ -63,14 +63,19 @@ const App = () => {
         handleShowFileChange = {() => setShowFileUpload(false) }/>
 
       <Menu mplusOutput = { mplusOutput }     handlePageChange = { handlePageChange } page={page}/>
+
+
       <div style={contentStyle}>
-        <WholeOutput          show = { page === 'wholeoutput' }         mplusOutput = { mplusOutput } />
-        <ModelFitInformation  show = { page === 'modelfitinformation' }    modelFitInformation = { mplusOutput !== null ? mplusOutput.parsed.modelFitInformation : null } />
-        <ModelResults         show = { page === 'modelresults' }  groups = { groups }   results = { mplusOutput !== null ? mplusOutput.parsed.modelResults : null } />
-        <ModelResults         show = { page === 'stdmodelresults' }  groups = { groups } results = { mplusOutput !== null ? mplusOutput.parsed.standardizedModelResults : null } />
-        <ResidualOutput       show = { page === 'residualoutput' }  output={ mplusOutput !== null ? mplusOutput.parsed.residualOutput : null }/>
-        <ModelModificationIndices show = {  page === 'modelmodificationindices' } modelmodificationindices={ mplusOutput !== null ? mplusOutput.parsed.modelIndices : null }/>
+        <WholeOutput              show = { page === 'wholeoutput' }               mplusOutput = { mplusOutput } />
+        <ModelFitInformation      show = { page === 'modelfitinformation' }       mplusOutput = { mplusOutput } />
+        <ModelResults             show = { page === 'modelresults'    }           mplusOutput = { mplusOutput } />
+        <ModelResults             show = { page === 'stdmodelresults' }           mplusOutput = { mplusOutput } type='standardized' />
+        <ResidualOutput           show = { page === 'residualoutput'  }           mplusOutput = { mplusOutput } />
+        <ModelModificationIndices show = {  page === 'modelmodificationindices' } mplusOutput={ mplusOutput }/>
       </div>
+      
+
+
     </div>
   )
 

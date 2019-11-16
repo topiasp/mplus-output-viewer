@@ -79,26 +79,28 @@ const parseESTIMATED = (ESTIMATED_GROUP) => {
 }
 
 
-var parseUNIVARIATETABLE = table => {
+const parseUNIVARIATETABLE = table => {
 
-  var rows = table.content.filter(row => row!=='')
-  var group = /FOR ([^ ]+)$/.exec(table.header.result) // Get group name from header text. It is assumed that group name does not contain white spaces
+
+  const rows = table.content.filter(row => row!=='')
+  let group = /FOR ([^ ]+)$/.exec(table.header.result) // Get group name from header text. It is assumed that group name does not contain white spaces
 
   group = group ? group[1] : 'Unknown group' //
 
-  var headerRegex = /Variable.+Observed/
+  const headerRegex = /Variable.+Observed/
 
-  var header = rows.find(row => row.match(headerRegex))
-  var datarows = rows.filter(row => !row.match(headerRegex))
- 
+  const header = rows.find(row => row.match(headerRegex))
+  let datarows = rows.filter(row => !row.match(headerRegex))
+  datarows = datarows.filter(row => row.match(/[A-Za-z0-9]/)) // Contains non-whitespace characters so !== '' does not work
+
   // Count the number of blanks
   // This tells us the indentation of rows
-  var rowDepth = datarows.map(r => r.split(' ').findIndex(c => c!==''))
-  var minDepth = rowDepth.reduce((t,c) => c<t ? c : t)
+  const rowDepth = datarows.map(r => r.split(' ').findIndex(c => c!==''))
+  const minDepth = rowDepth.reduce((t,c) => c<t ? c : t)
   // find and mark subtableheaders
   datarows = datarows.map(row => ({ content: row, subtableHeader: row.split(' ').findIndex(c => c!=='')  === minDepth    })  )
 
-  var subtables = datarows.reduce((tot,cur) => {
+  const subtables = datarows.reduce((tot,cur) => {
 
     if (cur.subtableHeader) {
       return( tot.concat([{ header: cur.content.replace(/^[ ]+/,''), rows: [] }]) )
@@ -161,18 +163,22 @@ const extractResidualOutput = (ResidualOutputChapter) => {
   const UNIVARIATE = chaptersOfResidualOutput.filter(chap => chap.header.result.indexOf('ESTIMATED MODEL AND RESIDUAL') === -1)
 
   const PARSED_ESTIMATED  = ESTIMATED.map(parseESTIMATED)
-  const PARSED_UNIVARIATE = UNIVARIATE.map(parseUNIVARIATETABLE)
-  const PARSED_UNIVARIATE_SINGLE_TABLE = PARSED_UNIVARIATE.reduce((tot,cur) => (!tot) ? cur : { ...tot, cells: tot.cells.concat(cur.cells) }, undefined)
 
+  let univariateProportions = undefined
+  if (UNIVARIATE.length>0) {
+    const PARSED_UNIVARIATE = UNIVARIATE.map(parseUNIVARIATETABLE)
+    const PARSED_UNIVARIATE_SINGLE_TABLE = PARSED_UNIVARIATE.reduce((tot,cur) => (!tot) ? cur : { ...tot, cells: tot.cells.concat(cur.cells) }, undefined)
+    univariateProportions = {
+      ...PARSED_UNIVARIATE_SINGLE_TABLE
+      ,cells: PARSED_UNIVARIATE_SINGLE_TABLE.cells.flat()
+    }
+  }
 
 
   return {
     means: PARSED_ESTIMATED.map(E => E.means.flat()).flat(),
     covariances: gatherByKey( PARSED_ESTIMATED.map(E => E.covariances).flat() ),
-    univariateProportions: {
-      ...PARSED_UNIVARIATE_SINGLE_TABLE
-      ,cells: PARSED_UNIVARIATE_SINGLE_TABLE.cells.flat()
-    }
+    univariateProportions
   }
 }
 

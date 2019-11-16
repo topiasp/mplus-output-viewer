@@ -3,26 +3,42 @@ import React from 'react'
 import { getUniqueFromArray, rowToColumn } from '../utils/utils'
 import ResultTable from './ResultTable'
 import { Container } from 'react-bootstrap'
+import extractModelIndicesTable from '../utils/extractModelModIndices'
+import Error from './Error'
 
 
 
-const ModelModificationIndices = ({ modelmodificationindices,show }) => {
+const ModelModificationIndices = ({ mplusOutput,show }) => {
 
-  if ( modelmodificationindices === null || !show  ) {
+  if ( mplusOutput === undefined || mplusOutput === null || !show  ) {
     return ''
   }
 
-  if ( modelmodificationindices === undefined  ) {
+  // extract model mod indices
+  let modelIndices
+  try {
+    modelIndices = extractModelIndicesTable(
+      { chapter: mplusOutput.parsed.chapters.find(chap => chap.header.result==='MODEL MODIFICATION INDICES')
+        , NumberOfGroups: mplusOutput.parsed.NumberOfGroups
+      })
+  } catch(e) {
     return(
-      <Container>
-            No model modification indices to display
-      </Container>
+      <Error message={'Error with parsing model mod. indices: ' + e.message }/>
+    )
+  }
+
+  // Return warnign message if no mod. indices exist
+  if ( modelIndices === undefined  ) {
+    return(
+      <Error type='warning' message='No model modification indices to display'/>
     )
   }
 
 
-  let groups = getUniqueFromArray( modelmodificationindices.cells.map(o => o.keys[0]) )
-  const cells = manipulateModificationIndicesToTableCells(modelmodificationindices.cells, groups)
+
+
+  let groups = getUniqueFromArray( modelIndices.cells.map(o => o.keys[0]) )
+  const cells = manipulateModificationIndicesToTableCells( modelIndices.cells, groups)
 
 
 
@@ -42,7 +58,7 @@ const ModelModificationIndices = ({ modelmodificationindices,show }) => {
     <Container>
       <h3>Model modification indices</h3>
       <div>
-        { modelmodificationindices.minimumMIvalue }
+        { modelIndices.minimumMIvalue }
       </div>
       <div>
         A group is not shown in the table if no modification indices are above the minimum value.

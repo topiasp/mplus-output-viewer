@@ -92,7 +92,7 @@ const FileLoader = (  { handleFileLoad, showFileUpload, handleShowFileChange }) 
 
       </Modal.Body>
 
-      <Button primary={'true'} >
+      <Button primary={'true'} style={{ margin: '1%'}} >
         <input id="file-upload" type="file" style={inputStyle} onChange={ (e) => handleFileLoad(e.target.files[0]) }></input>
         <label htmlFor="file-upload" className="custom-file-upload"  style={{ margin: '0px' }}>Or use the file explorer</label>
       </Button>

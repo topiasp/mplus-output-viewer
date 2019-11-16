@@ -2,16 +2,33 @@ import React from 'react'
 
 import { getUniqueFromArray, rowToColumn } from '../utils/utils'
 import ResultTable from './ResultTable'
+import Error from './Error'
 import { Container } from 'react-bootstrap'
 
 
 import uuidv4 from 'uuid'
+import extractResidualOutput from '../utils/extractResidualOutput'
 
-const ResidualOutput = ({ output,show }) => {
+const ResidualOutput = ({ mplusOutput,show }) => {
 
-  if ( output === null || !show || output === undefined ) {
+  if ( mplusOutput === null || !show || mplusOutput === undefined ) {
     return('')
   }
+
+  let output = undefined
+
+  // Try extracting output
+  try {
+
+    output = extractResidualOutput({ chapter: mplusOutput.parsed.chapters.find(chap => chap.header.result==='RESIDUAL OUTPUT'), NumberOfGroups: mplusOutput.parsed.NumberOfGroups })
+
+  } catch(e) {
+
+    return(
+      <Error   message={ 'Error with parsing residual output: ' + e.message }/>
+    )
+  }
+
 
 
   let groups = getUniqueFromArray( output.means.map(o => o.group) )
@@ -56,9 +73,10 @@ const ResidualOutput = ({ output,show }) => {
   // univariateProportions
   let propTable = ((props) => {
 
-    if (props.headers.length === 0 ) {
+    if (props === undefined) {
       return ''
     }
+
 
     // Add headers: Group and parameter
 
