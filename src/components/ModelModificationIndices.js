@@ -34,7 +34,7 @@ const ModelModificationIndices = ({ mplusOutput,show }) => {
     )
   }
 
-
+  console.log('modelIndices',modelIndices)
 
 
   let groups = getUniqueFromArray( modelIndices.cells.map(o => o.keys[0]) )
@@ -44,9 +44,10 @@ const ModelModificationIndices = ({ mplusOutput,show }) => {
 
   // Table headers
   let headers = [
-    { label: 'Subtable header', index: 0, values: getUniqueFromArray( cells.map(cell => cell.rows[0]) ) },
-    { label: 'Parameter', index: 1, values: getUniqueFromArray( cells.map(cell => cell.rows[1]) ) },
-    { label: 'Statistic', index: 1, values: getUniqueFromArray( cells.map(cell => cell.rows[2]) ) },
+
+    { label: 'Subtable header', index: 0, values: getUniqueFromArray( cells.map(cell => cell.rows[1]) ) },
+    { label: 'Parameter', index: 1, values: getUniqueFromArray( cells.map(cell => cell.rows[2]) ) },
+    { label: 'Statistic', index: 2, values: getUniqueFromArray( cells.map(cell => cell.rows[3]) ) },
   ]
 
   headers = headers.concat( groups.map(group => {
@@ -76,8 +77,11 @@ const ModelModificationIndices = ({ mplusOutput,show }) => {
 
 const manipulateModificationIndicesToTableCells = (indices,groups) => {
 
+  console.log('idnices',indices)
+  
   let cells = indices.map(cell => ({ ...cell, column: cell.keys[0], rows: cell.keys.slice(1,) }))
   cells = rowToColumn(cells)
+
 
   // add empty cells to table for coherence
   const ensureCellCount = cell => {
@@ -93,6 +97,7 @@ const manipulateModificationIndicesToTableCells = (indices,groups) => {
   }
 
   cells = cells.map(ensureCellCount)
+  
   return cells
 }
 

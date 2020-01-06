@@ -11,7 +11,7 @@ import ModelFitInformation from './components/ModelFitInformation'
 import ResidualOutput from './components/ResidualOutput'
 import ModelModificationIndices from './components/ModelModificationIndices'
 
-
+import './bootstrap.min.css'
 
 const App = () => {
 

@@ -20,7 +20,7 @@ const ModelResults = ({ mplusOutput, show, type  }) => {
     results = applyExtraction(mplusOutput,type)
   } catch(e) {
     return(
-      <Error message={ 'Error with parsing residual output: ' + e.message }/>
+      <Error message={ 'Error with parsing model results: ' + e.message }/>
     )
   }
 
