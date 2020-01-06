@@ -15,14 +15,15 @@ const convertArrayOfCellsToCSV = (args) => {
 
   result += headers.join(delimiter) + '\n'
 
-
-  result += data.map((cell) => {
+  let tmp = data.map((cell) => {
     if (!Array.isArray(cell)) {
       return cell.join(delimiter)
     }
     return cell.join(delimiter)
-  }).join('\n')
+  }).map(str => str.replace(/(\r\n|\n|\r)/gm,'')) // replace possible existing linechanges
 
+
+  result += tmp.join('\n')
   return result
 }
 
@@ -62,6 +63,8 @@ const DownloadCSVbutton = ({ params, float }) => {
   const headers = params.headers
 
   const handleClick = () => {
+
+    console.log('downloading ', data)
     downloadCSV({ data: data, headers: headers })
 
 
